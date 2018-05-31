@@ -6,6 +6,11 @@ using UnityEngine;
 public class PlayerCtrl : MonoBehaviour {
     public int speedBoost;
     public float jumpSpeed;
+    public bool isGrounded;
+    public LayerMask WhatIsGround;
+    public Transform feet;
+    public float boxWidth = 1f;
+    public float boxHeight = 1f ;
     private Rigidbody2D rb;
     private SpriteRenderer sr;
     private Animator anim;
@@ -24,6 +29,9 @@ public class PlayerCtrl : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        isGrounded = Physics2D.OverlapBox(feet.position,
+            new Vector2(boxWidth, boxHeight), 360.0f, WhatIsGround);
+
         float playerSpeed = Input.GetAxisRaw("Horizontal");
         if (playerSpeed != 0)
         {
@@ -54,6 +62,12 @@ public class PlayerCtrl : MonoBehaviour {
            anim.SetInteger("State", stateIdle);
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(feet.position,
+            new Vector3(boxWidth, boxHeight));
+    }
+
     void MoveHorizontal(float speed)
     {
         if (speed < 0)
@@ -67,9 +81,12 @@ public class PlayerCtrl : MonoBehaviour {
 
     void Jump()
     {
-        isJumping = true;
-        rb.AddForce(new Vector2(0, jumpSpeed));
-        anim.SetInteger("State", stateJump);
+        if(isGrounded)
+        {
+            isJumping = true;
+            rb.AddForce(new Vector2(0, jumpSpeed));
+            anim.SetInteger("State", stateJump);
+        }
     }
 
 
