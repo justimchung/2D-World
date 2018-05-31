@@ -20,6 +20,7 @@ public class PlayerCtrl : MonoBehaviour {
     private const int stateFalling = 3;
     private const int stateHurt = -1;
     private bool isJumping = false;
+    private bool canDoubleJump = false;
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -84,8 +85,19 @@ public class PlayerCtrl : MonoBehaviour {
         if(isGrounded)
         {
             isJumping = true;
+            canDoubleJump = true;
             rb.AddForce(new Vector2(0, jumpSpeed));
             anim.SetInteger("State", stateJump);
+        }
+        else
+        {
+            if(canDoubleJump)
+            {
+                canDoubleJump = false;
+                rb.velocity = new Vector2(rb.velocity.x, 0f);
+                rb.AddForce(new Vector2(0, jumpSpeed));
+                anim.SetInteger("State", stateJump);
+            }
         }
     }
 
