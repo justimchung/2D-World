@@ -21,6 +21,8 @@ public class PlayerCtrl : MonoBehaviour {
     private const int stateHurt = -1;
     private bool isJumping = false;
     private bool canDoubleJump = false;
+    public Transform leftBulletPos, rightBulletPos;
+    public GameObject leftBullet, rightBullet;
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -47,9 +49,28 @@ public class PlayerCtrl : MonoBehaviour {
             Jump();
         }
 
+        if(Input.GetButtonDown("Fire1"))
+        {
+            FireBullet();
+        }
+
         if (rb.velocity.y < 0)
             showFalling();
 	}
+
+    private void FireBullet()
+    {
+        if(sr.flipX)
+        {
+            Instantiate(leftBullet, leftBulletPos.position,
+            Quaternion.identity);
+        }
+        else
+        {
+            Instantiate(rightBullet, rightBulletPos.position,
+                Quaternion.identity);
+        }
+    }
 
     private void showFalling()
     {
@@ -106,7 +127,6 @@ public class PlayerCtrl : MonoBehaviour {
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            Debug.Log("collision");
             isJumping = false;
         }
     }
