@@ -8,6 +8,7 @@ TagManager:
   - PlayerHead
   - Breakable
   - coin
+  - Enemy
   layers:
   - Default
   - TransparentFX
