@@ -129,5 +129,22 @@ public class PlayerCtrl : MonoBehaviour {
         {
             isJumping = false;
         }
+        if(collision.gameObject.CompareTag("Enemy"))
+        {
+            PlayerDied();
+        }
     }
+
+    private void PlayerDied()
+    {
+        rb.velocity = Vector2.zero;
+        rb.AddForce(new Vector2(-150f, 300f));
+        gameObject.transform.Rotate(new Vector3(0, 0, 45f));
+        Component[] buf =gameObject.GetComponentsInChildren(typeof(Collider2D));
+        //GetComponent<Collider2D>().enabled = false;
+        foreach(Collider2D c2d in buf)
+            c2d.enabled = false;
+        GetComponent<PlayerCtrl>().enabled = false;
+    }
+
 }
